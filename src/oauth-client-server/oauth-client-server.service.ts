@@ -13,18 +13,13 @@ export class OauthClientServerService {
   ) {}
 
   async getCredentials() {
-    const cached = await this.cacheManager.get('credentials');
-    if (cached) {
-      return cached;
-    } else {
-      const headers = { 'X-Client-Id': this.configService.get('X-CLIENT-ID') };
-      const response = await this.httpService.axiosRef.get(
-        'https://test.gnzs.ru/oauth/get-token.php',
-        { headers },
-      );
-      await this.cacheManager.set('credentials', response.data)
-      console.log(response.data);
-      return response.data
-    }
+    const headers = { 'X-Client-Id': this.configService.get('X-CLIENT-ID') };
+    const response = await this.httpService.axiosRef.get(
+      'https://test.gnzs.ru/oauth/get-token.php',
+      { headers },
+    );
+    await this.cacheManager.set('credentials', response.data, 0);
+    console.log(response.data);
+    return response.data;
   }
 }
